@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+  db:
+    container_name: postgresql-container
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=newBase
+      - POSTGRES_PASSWORD=Postgres8371
+      - POSTGRES_USER=postgres
+    volumes:
+      - /Users/BelloneeDocker/var/lib/postgresql/data
+    restart: always
+  backend:
+    build: .
+    container_name: blogapp_container
+    image: blogapp
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/newBase
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=Postgres8371
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
